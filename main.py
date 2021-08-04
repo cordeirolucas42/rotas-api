@@ -1,8 +1,8 @@
 from typing import Optional,List
 from fastapi import FastAPI
 
-from getAllRoutes import getAllRoutes
-from getAllRoutes import Graph
+from graphHandler import getAllRoutes, getMinDistance
+from graphHandler import Graph, Distance
 
 graphsDB: List[Graph] = []
 
@@ -36,9 +36,23 @@ def get_all_routes(graphId: int, town1: str, town2: str, maxStops: int):
     currentGraph = [graph for graph in graphsDB if graph.id == graphId][0]
     return getAllRoutes(currentGraph,town1,town2,maxStops)
 
+# TEST VERSION
 @app.get("/routes/{graphId}/from/{town1}/to/{town2}")
 def get_all_routes(graphId: int, town1: str, town2: str, maxStops: int):
     currentGraph = [graph for graph in graphsDB if graph.id == graphId][0]
     return getAllRoutes(currentGraph,town1,town2,maxStops)
+
+@app.post("/distance/{graphId}/from/{town1}/to/{town2}")
+def get_min_distance(graphId: int, town1: str, town2: str):
+    currentGraph = [graph for graph in graphsDB if graph.id == graphId][0]
+    (_,minPath,_,minDistance) = getMinDistance(currentGraph,town1,town2)
+    return Distance(distance=minDistance,path=minPath)
+
+# TEST VERSION
+@app.get("/distance/{graphId}/from/{town1}/to/{town2}")
+def get_min_distance(graphId: int, town1: str, town2: str):
+    currentGraph = [graph for graph in graphsDB if graph.id == graphId][0]
+    (_,minPath,_,minDistance) = getMinDistance(currentGraph,town1,town2)
+    return Distance(distance=minDistance,path=minPath)
 
 # py -m uvicorn main:app --reload

@@ -17,6 +17,10 @@ class Route(BaseModel):
 class Routes(BaseModel):
     routes: List[Route]
 
+class Distance(BaseModel):
+    distance: int
+    path: List[str]
+
 def getAllRoutes(graph: Graph, source:str, target:str, maxStops:int, path: Optional[str] = "", paths: Optional[Routes] = []) -> Routes:
         path = path + source
         currentRoutes = []
@@ -39,3 +43,19 @@ def getAllRoutes(graph: Graph, source:str, target:str, maxStops:int, path: Optio
         for currentRoute in currentRoutes:
             paths.routes.append(Route(route=currentRoute,stops=(len(currentRoute) - 1)))
         return paths
+
+def getMinDistance(graph: Graph, source: str, target: str, path: Optional[List[str]] = [], minPath: Optional[List[str]] = [], distance: Optional[int] = 0, minDistance: Optional[int] = 10000):
+    path = path + [source]
+    if (source == target and distance < minDistance):
+        minDistance = distance
+        minPath = path
+        return (path,minPath,distance,minDistance)
+    elif (source == target):
+        return (None,minPath,None,minDistance)
+    if source not in [edge.source for edge in graph.data]:
+        return (None,minPath,None,minDistance)
+    for next in [edge.target for edge in graph.data if edge.source == source]:
+        newDistance = distance + [edge.distance for edge in graph.data if edge.source == source and edge.target == next][0]
+        if next not in path:            
+            (newPath,minPath,newDistance,minDistance) = getMinDistance(graph,next,target,path,minPath,newDistance,minDistance)
+    return (None,minPath,None,minDistance)
