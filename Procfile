@@ -1,0 +1,1 @@
+web: py -m uvicorn main:app
