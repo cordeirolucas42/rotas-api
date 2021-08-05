@@ -1,9 +1,16 @@
 from typing import Optional,List
 from fastapi import FastAPI
+from deta import Deta
+import os
+from dotenv import load_dotenv
+load_dotenv("./.env")
 
 from graphHandler import getAllRoutes, getMinDistance
 from graphHandler import Graph, Distance
 
+# deta = Deta(os.environ['DETA_KEY'])
+deta = Deta()
+graphsDB = deta.Base("graphs")
 graphsDB: List[Graph] = []
 
 app = FastAPI()
