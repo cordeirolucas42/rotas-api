@@ -2,8 +2,6 @@ from graphHandler import Graph, Distance
 from graphHandler import getAllRoutes, getMinDistance
 from typing import Optional, List
 from fastapi import FastAPI
-from dotenv import load_dotenv
-load_dotenv("./.env")
 
 graphsDB: List[Graph] = []
 
