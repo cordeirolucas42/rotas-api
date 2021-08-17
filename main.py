@@ -11,9 +11,7 @@ app = FastAPI()
 @app.get("/")
 def read_root():
     return {
-        "Nome": "Lucas Cordeiro",
-        "Idade": 27,
-        "Data da Vacina": "04/08/21"
+        "Mensagem": "API de rotas de logística utilizando grafos"
     }
 
 
